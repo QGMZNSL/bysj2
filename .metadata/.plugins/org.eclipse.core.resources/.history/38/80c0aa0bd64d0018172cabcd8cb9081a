@@ -1,0 +1,55 @@
+package bysj.zxpc.dao;
+
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.mysql.jdbc.PreparedStatement;
+
+public class BaseDao {
+	public Map login(String userid) {
+		ResultSet rs = null;
+		JdbcTemplate db = new JdbcTemplate();
+		String sql = "select t.* from sys_user t where user_id=?";
+		Map user = new HashMap();
+		PreparedStatement pst= db.GetPrepareStatement(sql);
+		try{
+			pst.setString(1,userid);
+//			System.out.println("select sql="+sql);
+			rs=pst.executeQuery();
+				while (rs.next()) {
+					user.put("userType", rs.getString("user_Type"));
+					user.put("username",rs.getString("user_name"));
+					user.put("userpass",rs.getString("user_pass"));
+					user.put("createtime", rs.getString("createtime"));
+					user.put("enable", rs.getString("enable"));
+					user.put("operater", rs.getString("operater"));
+					user.put("scale", rs.getString("scale"));
+					user.put("userid", rs.getString("user_id"));
+					user.put("userOrg", rs.getString("user_Org"));
+					user.put("userPhone", rs.getString("user_Phone"));
+					user.put("userRight", rs.getString("user_Right"));
+				}
+			} catch (SQLException e) {
+				// e.printStackTrace();
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+						// e.printStackTrace();
+					}
+				}
+				if (db != null) {
+					db.close();
+				}
+
+			}
+			db.close();
+		
+		return user;
+	}
+
+}

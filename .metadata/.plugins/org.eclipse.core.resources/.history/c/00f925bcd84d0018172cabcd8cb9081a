@@ -1,0 +1,13 @@
+package bysj.zxpc.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import bysj.zxpc.bean.MenuBean;
+
+public class MenuDao {
+	public List<MenuBean> findMune(){
+		List<MenuBean> muneList = new ArrayList<MenuBean>();
+	}
+
+}

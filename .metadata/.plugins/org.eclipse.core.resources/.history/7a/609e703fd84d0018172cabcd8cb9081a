@@ -1,0 +1,22 @@
+package bysj.zxpc.action;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import bysj.zxpc.service.LoginService;
+
+@Controller
+public class LoginAction extend WebActionSupport{
+	@RequestMapping("login")
+	public String Login(HttpServletRequest request, HttpServletResponse response,String userName,String userPass) {
+		LoginService ls = new LoginService();
+		int i = ls.loginService(userName, userPass);
+		if(i==0){
+			Alert
+		}
+		return "";
+	}
+}

@@ -1,0 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<div class="sidebar" >
+    <div class="sidebar-title">
+       	 功能菜单
+    </div>
+    <c:forEach items="${menulist}" var="ml" varStatus="i">
+    <div class="sub-title">
+    <a href="<%=request.getContextPath()%>/${ml.url}" target="_parent">${ml.displayName}</a>
+    </div>
+    </c:forEach>
+</div>
+     

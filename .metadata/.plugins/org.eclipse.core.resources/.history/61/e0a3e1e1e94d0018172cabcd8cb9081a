@@ -1,0 +1,11 @@
+package bysj.zxpc.bean;
+
+public class CourseBean {
+	int courseId;
+	String courseName;
+	int courseTime;
+	int courseGra;
+	String courseTea;
+	String courseBz;
+	
+}

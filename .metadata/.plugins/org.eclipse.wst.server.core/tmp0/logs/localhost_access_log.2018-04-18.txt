@@ -1,0 +1,10 @@
+127.0.0.1 - - [18/Apr/2018:16:49:27 +0800] "GET / HTTP/1.1" 404 951
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/ HTTP/1.1" 200 6332
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/assets/font-awesome/4.5.0/css/font-awesome.min.css HTTP/1.1" 200 27466
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/assets/css/bootstrap.min.css HTTP/1.1" 200 152755
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/Content/js/html5shiv.min.js HTTP/1.1" 200 2642
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/Content/js/respond.js HTTP/1.1" 200 8762
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/assets/fonts/glyphicons-halflings-regular.eot? HTTP/1.1" 200 20127
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/assets/css/ace.min.css HTTP/1.1" 200 535210
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/assets/font-awesome/4.5.0/fonts/fontawesome-webfont.eot? HTTP/1.1" 200 70807
+0:0:0:0:0:0:0:1 - - [18/Apr/2018:16:49:30 +0800] "GET /PESZp/Content/Image/top.png HTTP/1.1" 200 10000

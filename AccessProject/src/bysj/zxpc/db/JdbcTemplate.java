@@ -1,0 +1,540 @@
+package bysj.zxpc.db;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.naming.InitialContext;
+
+public class JdbcTemplate {
+
+	private Connection conn = null;
+	private Statement sm = null;
+	private ResultSet rs = null;
+	private ResultSetMetaData rsmd = null;
+	private CallableStatement cstmt = null;
+	public DbResult result = null;
+
+
+	public JdbcTemplate() {
+		result = new DbResult();
+		conn = GetConnTomcat();
+	}
+
+	public void close() {
+		try {
+			close(conn, sm, rs);
+		} catch (SQLException e) {
+			System.err.println("系统内部关闭db连接异常.");
+			e.printStackTrace();
+		}
+	}
+
+	// hunter
+	private void close(Connection conn, Statement stmt, ResultSet rs)
+			throws SQLException {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+		} catch (Exception e) {
+			System.err.println("系统内部关闭db.result set连接异常:"+e.toString());
+		} finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (Exception e) {
+				System.err.println("系统内部关闭db.stmt连接异常:"+e.toString());
+			} finally {
+				if (conn != null) {
+					conn.close();
+				}
+			}
+		}
+	}
+
+	/**
+	 * 资源回收
+	 */
+	protected void finalize() {
+		this.close();
+	}
+
+	/**
+	 * 得到prepareStatement对象
+	 */
+	public PreparedStatement GetPrepareStatement(String sql) {
+		try {
+			return conn.prepareStatement(sql);
+		} catch (Exception e) {
+			System.out.println("获取prepare statement 对象异常.");
+			return null;
+		} finally {
+
+		}
+	}
+
+	/**
+	 * 得到CallableStatement对象
+	 */
+	public CallableStatement GetCallableStatement(String sql) {
+		try {
+			return conn.prepareCall(sql);
+		} catch (Exception e) {
+			System.out.println("获取callable statement 对象异常.");
+			// e.printStackTrace();
+			return null;
+		} finally {
+
+		}
+	}
+
+	// test
+	private int CheckEnv() {
+		if (System.getProperty("os.name").indexOf("Windows") != -1) {
+			System.out.println("on windows,get conn hard code.");
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+
+	private Connection GetConnTomcat() {
+		String dbUrl = "jdbc:mysql://localhost:3306/bysj";
+		String theUser = "root";
+		String thePw = "mysql";
+		Connection c = null;
+
+		// 初始化连接
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			// 与url指定的数据源建立连接
+			c = DriverManager.getConnection(dbUrl, theUser, thePw);
+			return c;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 得到statement实例
+	 * 
+	 * @return
+	 */
+	private Statement GetSm() {
+
+		try {
+			if (conn == null) {
+				System.out.println("get statment:conn 为null");
+				return null;
+			}
+			sm = conn.createStatement();
+		} catch (SQLException e) {
+			System.out.println("get statment:异常");
+		}
+		return sm;
+	}
+
+	/**
+	 * 关闭数据连接资源
+	 */
+	private void CloseJdbc() {
+		try {
+			if (rs != null)
+				rs.close();
+		} catch (SQLException e) {
+			System.out.println("关闭jdbc数据连接资源异常");
+		}
+		try {
+			if (sm != null)
+				sm.close();
+		} catch (SQLException e) {
+			System.out.println("关闭jdbc数据连接资源异常");
+		}
+		try {
+			if (conn != null)
+				conn.close();
+		} catch (SQLException e) {
+			System.out.println("关闭jdbc数据连接资源异常");
+			// e.printStackTrace();
+		}
+	}
+
+	private void CloseSm() {
+		try {
+			if (rs != null)
+				rs.close();
+		} catch (SQLException e) {
+			System.out.println("关闭jdbc数据连接资源异常");
+		}
+		try {
+			if (sm != null)
+				sm.close();
+		} catch (SQLException e) {
+			System.out.println("关闭jdbc数据连接资源异常");
+		}
+	}
+
+	/**
+	 * 定义事务
+	 */
+	private void BeginTransaction() {
+		try {
+			conn.setAutoCommit(false);
+		} catch (Exception e) {
+			System.out.println("打开数据事务异常。");
+		}
+	}
+
+	/**
+	 * 事务提交
+	 */
+	private void Commit() {
+		try {
+			conn.commit();
+			conn.setAutoCommit(true);
+		} catch (Exception e) {
+			System.out.println("数据事务提交异常");
+		}
+	}
+
+	/**
+	 * 事务回滚
+	 */
+	private void Rollback() {
+		try {
+			conn.rollback();
+			conn.setAutoCommit(true);
+		} catch (Exception e) {
+			System.out.println("事务roll back异常。");
+		}
+	}
+
+	// **********************************************************************
+
+	/**
+	 * 得到查询语句结果集
+	 * 
+	 * @return ResultSet 结果集实例
+	 */
+	public DbResult Query(String sql) {
+		LogUtil.debug("Query", sql);
+		try {
+			if (rs != null) {
+				CloseSm();
+			}
+			rs = GetSm().executeQuery(sql);
+			result.ResultSet = rs;
+			result.IsSuccess = true;
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:" + sql);
+			e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		}
+		return result;
+	}
+
+	/**
+	 * 得到查询语句结果集
+	 * 
+	 * @return ResultSet 结果集实例
+	 */
+	public DbResult Queryx(String sql) {
+		LogUtil.debugx("Query", sql);
+		try {
+			if (rs != null) {
+				CloseSm();
+			}
+			rs = GetSm().executeQuery(sql);
+			result.ResultSet = rs;
+			result.IsSuccess = true;
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:" + sql);
+			e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		}
+		return result;
+	}
+
+	/**
+	 * 得到查询的结果list
+	 * 
+	 * @return List<Map<字段名,字段值>>
+	 */
+	public DbResult QueryToMap(String sql) {
+		if (sql.startsWith("!")) {
+			sql = sql.substring(1);
+		} else
+			LogUtil.debug("QueryToMap", sql);
+		DbResult result = new DbResult();
+		List list = new ArrayList();
+		try {
+			Statement st = GetSm();
+			rs = st.executeQuery(sql);
+			rsmd = rs.getMetaData();
+			int rowIndex = 1;
+			int colsNum = rsmd.getColumnCount();// 每条记录总列数
+			while (rs.next()) {
+				Map map = new HashMap();
+				for (int i = 1; i <= colsNum; i++) {
+					String name = rsmd.getColumnName(i).toLowerCase();
+					map.put(name, rs.getObject(i));
+				}
+				list.add(map);
+				result.IsSuccess = true;
+			}
+			result.List = list;
+		} catch (Exception e) {
+			System.err.println("jt查询出错:" + sql);
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		}
+		return result;
+	}
+
+	/**
+	 * 执行一条操作语句
+	 * 
+	 * @return long型数字 操作影响行数
+	 */
+	public DbResult Execute(String sql) {
+		if (sql.startsWith("!")) {
+			sql = sql.substring(1);
+		} else
+			LogUtil.debug("Execute", sql);
+
+		try {
+			result.AffectedLines = GetSm().executeUpdate(sql);
+			if (result.AffectedLines > 0) {
+				result.IsSuccess = true;
+			} else {
+				result.IsSuccess = false;
+			}
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:" + sql);
+			// e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		}
+		return result;
+	}
+
+	/**
+	 * 执行多条操作语句
+	 * 
+	 * @param sql语句组成的字符串数组
+	 * @return 造作结果成功与否
+	 */
+	public synchronized DbResult Execute(String[] sql) {
+		try {
+			BeginTransaction();
+			Statement st = GetSm();
+			for (int i = 0; i < sql.length; i++) {
+				result.AffectedLines = st.executeUpdate(sql[i]);
+				if (result.AffectedLines <= 0) {
+					result.IsSuccess = false;
+					Rollback();
+					conn.setAutoCommit(true);
+					return result;
+				}
+			}
+			Commit();
+			result.IsSuccess = true;
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:" + sql);
+			Rollback();
+			e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+			return result;
+		}
+		return result;
+	}
+
+	/**
+	 * 得到的新的可用的唯一ID
+	 * 
+	 * @param sql
+	 * @return long型 SequenceID
+	 */
+	public DbResult GetSequenceID(String SeqName) {
+		String sql = "select Sequence_" + SeqName + ".nextval from dual";
+		try {
+			result = Query(sql);
+			if (result.ResultSet.next()) {
+				result.SequenceID = result.ResultSet.getLong(1);
+				return result;
+			}
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:get seq:" + sql);
+			// e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		}
+		return result;
+	}
+
+	/**
+	 * 得到的默认序列(Sequence_common)的下一ID
+	 * 
+	 * @return long型 SequenceID
+	 */
+	public DbResult GetSequenceID() {
+		return GetSequenceID("common");
+	}
+
+	/**
+	 * 得到首行首字段
+	 * 
+	 * @param sql
+	 * @return 首字段值
+	 */
+	public DbResult GetFirstCol(String sql) {
+		LogUtil.debug("GetFirstCol", sql);
+		ResultSet rs = Query(sql).ResultSet;
+		try {
+			if (!rs.next()) {
+				result.IsSuccess = false;
+				return result;
+			}
+			result.Result = rs.getObject(1);
+			result.IsSuccess = true;
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:get seq:" + sql);
+			// e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 得到首行首字段
+	 * 
+	 * @param sql
+	 * @return 首字段值
+	 */
+	public DbResult GetFirstColx(String sql) {
+		LogUtil.debugx("GetFirstCol", sql);
+		ResultSet rs = Query(sql).ResultSet;
+		try {
+			if (!rs.next()) {
+				result.IsSuccess = false;
+				return result;
+			}
+			result.Result = rs.getObject(1);
+			result.IsSuccess = true;
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:get seq:" + sql);
+			// e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 调用存储过程
+	 * 
+	 * @param callableName
+	 *            存储过程名
+	 * @param parames
+	 *            所有参数("参数1,参数2,……")组成的字符串
+	 * @return boolean型 调用是否成功
+	 */
+	public DbResult Callable(String callableName, String parames) {
+		String call = "{call " + callableName + "(" + parames + ")};"; // 调用语句
+		try {
+			CallableStatement proc = conn.prepareCall(call); // 调用存储过程
+			result.IsSuccess = proc.execute();
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:get call statment:" + call);
+			// e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		}
+		return result;
+	}
+
+	/**
+	 * 调用预定义通道
+	 */
+	public DbResult SetParams(PreparedStatement prestmt, Object[] params)
+			throws SQLException {
+		try {
+			if (params != null) {
+				for (int i = 0; i < params.length; i++) {
+					if (params[i] instanceof String) {
+						prestmt.setString(i + 1, (String) params[i]);
+					} else {
+						prestmt.setObject(i + 1, params[i]);
+					}
+				}
+			}
+			result.IsSuccess = true;
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:set param");
+			// e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+			throw new SQLException("params operate Error:" + e.getMessage());
+		}
+		return result;
+	}
+
+	/**
+	 * 得到某表相关的字段总数;
+	 */
+	public DbResult GetCount(String tableName, String field) {
+		String sql = "select count(" + field + ") from " + tableName;
+		try {
+			result = Query(sql);
+			if (result.ResultSet.next()) {
+				result.Result = result.ResultSet.getLong(1);
+				return result;
+			}
+		} catch (SQLException e) {
+			System.err.println("jt查询出错:get query:" + sql);
+			// e.printStackTrace();
+			result.IsSuccess = false;
+			result.Exception = e;
+			result.ErrorText = e.getMessage();
+		}
+		return result;
+	}
+}

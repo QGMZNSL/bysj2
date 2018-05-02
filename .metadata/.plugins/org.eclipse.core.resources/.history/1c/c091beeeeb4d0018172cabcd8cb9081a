@@ -1,0 +1,91 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<%String rgPath=request.getContextPath();%>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线评测系统</title>
+  <link href="<%=request.getContextPath()%>/assets/css/bootstrap.min.css" rel="stylesheet" />
+	    <link href="<%=request.getContextPath()%>/assets/css/bootstrap.css" rel="stylesheet">
+	    <link href="<%=request.getContextPath()%>/assets/css/yhz.css" rel="stylesheet">
+	    <script src="<%=request.getContextPath()%>/Content/jsml5shiv.min.js"></script>
+	    <script src="<%=request.getContextPath()%>/Content/js/respond.js"></script>
+	    <script src="<%=request.getContextPath()%>/assets/css/jquery-1.10.2.min.js"></script>
+	    <script type="text/javascript">
+	</script>
+</head>
+<body style="">
+<%@ include file="top.jsp" %>
+    <br/>
+    <br/>
+    <div class="container content-body">
+        <div class="row">
+            <div class="col-xs-3">
+              <%@ include file="left.jsp" %>                           
+            </div>
+            <div class="col-xs-9">             
+                   <div class="panel-group" id="accordion">
+12.  <div class="panel panel-default">
+13.    <div class="panel-heading">
+14.      <h4 class="panel-title">
+15.        <a data-toggle="collapse" data-parent="#accordion" 
+16.          href="#collapseOne">
+17.          点击我进行展开，再次点击我进行折叠。第 1 部分
+18.        </a>
+19.      </h4>
+20.    </div>
+21.    <div id="collapseOne" class="panel-collapse collapse in">
+22.      <div class="panel-body">
+23.        Nihil anim keffiyeh helvetica, craft beer labore wes anderson 
+24.        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher 
+25.        vice lomo.
+26.      </div>
+27.    </div>
+28.  </div>
+29.  <div class="panel panel-default">
+30.    <div class="panel-heading">
+31.      <h4 class="panel-title">
+32.        <a data-toggle="collapse" data-parent="#accordion" 
+33.          href="#collapseTwo">
+34.          点击我进行展开，再次点击我进行折叠。第 2 部分
+35.        </a>
+36.      </h4>
+37.    </div>
+38.    <div id="collapseTwo" class="panel-collapse collapse">
+39.      <div class="panel-body">
+40.        Nihil anim keffiyeh helvetica, craft beer labore wes anderson 
+41.        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher 
+42.        vice lomo.
+43.      </div>
+44.    </div>
+45.  </div>
+46.  <div class="panel panel-default">
+47.    <div class="panel-heading">
+48.      <h4 class="panel-title">
+49.        <a data-toggle="collapse" data-parent="#accordion" 
+50.          href="#collapseThree">
+51.          点击我进行展开，再次点击我进行折叠。第 3 部分
+52.        </a>
+53.      </h4>
+54.    </div>
+55.    <div id="collapseThree" class="panel-collapse collapse">
+56.      <div class="panel-body">
+57.        Nihil anim keffiyeh helvetica, craft beer labore wes anderson 
+58.        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher 
+59.        vice lomo.
+60.      </div>
+61.    </div>
+62.  </div>
+63.</div>
+
+ <%@ include file="Dibutu.jsp" %>
+</body>
+</html>
+
+
