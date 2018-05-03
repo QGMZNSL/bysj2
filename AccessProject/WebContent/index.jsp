@@ -6,11 +6,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>java在线评测系统</title>
 
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="assets/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="assets/css/ace.min.css" rel="stylesheet" />
-    <script src="Content/js/html5shiv.min.js"></script>
-    <script src="Content/js/respond.js"></script>
+        <link href="<%=request.getContextPath()%>/assets/css/bootstrap.min.css" rel="stylesheet" />
+	    <link href="<%=request.getContextPath()%>/assets/css/bootstrap.css" rel="stylesheet">
+	    <link href="<%=request.getContextPath()%>/assets/css/yhz.css" rel="stylesheet">
+	    <script src="<%=request.getContextPath()%>/Content/jsml5shiv.min.js"></script>
+	    <script src="<%=request.getContextPath()%>/Content/js/respond.js"></script>
+	    <script src="<%=request.getContextPath()%>/assets/css/jquery-1.10.2.min.js"></script>
 
     <style>
         body {

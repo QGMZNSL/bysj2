@@ -57,7 +57,6 @@ public class BaseDao {
 		try{
 			rs=pst.executeQuery();
 				while (rs.next()) {
-//					System.out.println("jinru");
 					CourseBean cb = new CourseBean();
 					cb.setCourseId(rs.getInt("course_id"));
 					cb.setCourseName(rs.getString("course_name"));
@@ -86,5 +85,6 @@ public class BaseDao {
 		
 		return courseList;
 	}
+	
 
 }

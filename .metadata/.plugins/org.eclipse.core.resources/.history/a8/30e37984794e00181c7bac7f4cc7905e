@@ -1,0 +1,80 @@
+package bysj.zxpc.action;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import bysj.zxpc.bean.CourseBean;
+import bysj.zxpc.bean.MenuBean;
+import bysj.zxpc.dao.BaseDao;
+import bysj.zxpc.service.LoginService;
+import net.sf.json.JSONArray;
+
+@Controller
+public class LoginAction{
+	@RequestMapping("login")
+	public String Login(HttpServletRequest request, HttpServletResponse response,String userName,String userPass) {
+		LoginService ls = new LoginService();
+		HttpSession session = request.getSession();
+		WebActionSupport ws = new WebActionSupport();
+		List<CourseBean> courseList = new ArrayList<CourseBean>();
+		List<MenuBean> muneList = new ArrayList<MenuBean>();
+		Map usermap = new HashMap();
+		usermap = ls.loginService(userName, userPass);
+		if(usermap.size()==0){                  //用户不存在
+			ws.OutWriteClient(response,"用户不存在！","index.jsp");
+		}else if(!usermap.get("UserPass").equals(userPass)){                 //密码错误
+			ws.OutWriteClient(response,"密码错误！","index.jsp");
+		}else{                 //登陆成功
+			muneList = ls.findMenuService(usermap.get("UserRole").toString());
+			courseList = ls.findCourseService();
+		}
+//		System.out.println("courseList="+courseList.get(0).getCourseTime());
+		session.setAttribute("usermap",usermap);
+		session.setAttribute("muneList",muneList);
+		session.setAttribute("courseList",courseList);
+		
+		return "start";
+	}
+	@RequestMapping("course")
+	public String  finTwoCourse(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		WebActionSupport ws = new WebActionSupport();
+		BaseDao bd = new BaseDao();
+		int courseId = Integer.parseInt(request.getParameter("courseId").toString());
+		String proRole = request.getParameter("proRole"); 
+		PrintWriter out = response.getWriter();	
+		HttpSession session = request.getSession();
+		List<Map> proMap = null;
+		proMap=bd.findTwoCourse(courseId,proRole);
+		JSONArray json = JSONArray.fromObject(proMap);	
+		out.print(json);
+        return null;
+	}
+	//注销
+		@RequestMapping("Exit")
+		public void logout(HttpServletRequest request, HttpServletResponse response) {
+			WebActionSupport ws = new WebActionSupport();
+			int i = 0 ;
+			try {
+				request.getSession().invalidate();
+				i = 1;
+			} catch (Exception e) {
+				i = -1;
+			} 
+			if(i == 1){
+				ws.relogin(response, "您已安全退出！","index.jsp");
+			}else{
+				ws.relogin(response, "安全退出异常！","index.jsp");
+			}
+		}
+}

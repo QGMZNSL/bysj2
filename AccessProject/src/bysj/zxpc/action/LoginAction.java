@@ -1,5 +1,7 @@
 package bysj.zxpc.action;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import bysj.zxpc.bean.CourseBean;
 import bysj.zxpc.bean.MenuBean;
+import bysj.zxpc.dao.BaseDao;
+import bysj.zxpc.dao.MenuDao;
 import bysj.zxpc.service.LoginService;
+import net.sf.json.JSONArray;
 
 @Controller
 public class LoginAction{
@@ -41,6 +46,20 @@ public class LoginAction{
 		session.setAttribute("courseList",courseList);
 		
 		return "start";
+	}
+	@RequestMapping("course")
+	public String  finTwoCourse(HttpServletRequest request, HttpServletResponse response,String courseIds,String proRole) throws IOException{
+		WebActionSupport ws = new WebActionSupport();
+		MenuDao md = new MenuDao();
+		int courseId = Integer.parseInt(courseIds);
+		PrintWriter out = response.getWriter();	
+		HttpSession session = request.getSession();
+		List<Map> proMap = null;
+		proMap=md.findTwoCourse(courseId,proRole);
+		JSONArray json = JSONArray.fromObject(proMap);
+//		System.out.println("json="+json);
+		out.print(json);
+        return null;
 	}
 	//注销
 		@RequestMapping("Exit")

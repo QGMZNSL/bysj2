@@ -1,0 +1,11 @@
+
+5月 03, 2018 11:35:21.87 NEW SESSION
+5月 03, 2018 11:35:21.87 [1208:8772:0503/113521:ERROR:CONSOLE(72)] "Uncaught TypeError: Cannot read property 'addExtensions' of undefined", source:  (72)
+5月 03, 2018 11:35:44.29 [1208:8772:0503/113544:ERROR:CONSOLE(72)] "Uncaught TypeError: Cannot read property 'addExtensions' of undefined", source:  (72)
+5月 03, 2018 11:37:10.20 [1208:5988:0503/113710:ERROR:ssl_client_socket_openssl.cc(1149)] handshake failed; returned -1, SSL error code 1, net_error -101
+5月 03, 2018 11:44:32.49 [1208:5988:0503/114432:ERROR:ssl_client_socket_openssl.cc(1149)] handshake failed; returned -1, SSL error code 1, net_error -101
+5月 03, 2018 13:07:34.44 [1208:5988:0503/130734:ERROR:ssl_client_socket_openssl.cc(1149)] handshake failed; returned -1, SSL error code 1, net_error -101
+5月 03, 2018 13:54:20.65 [1208:8772:0503/135420:ERROR:CONSOLE(72)] "Uncaught TypeError: Cannot read property 'addExtensions' of undefined", source:  (72)
+5月 03, 2018 13:57:11.69 [1208:8772:0503/135711:ERROR:CONSOLE(72)] "Uncaught TypeError: Cannot read property 'addExtensions' of undefined", source:  (72)
+5月 03, 2018 14:18:39.41 [1208:8772:0503/141839:ERROR:CONSOLE(72)] "Uncaught TypeError: Cannot read property 'addExtensions' of undefined", source:  (72)
+5月 03, 2018 16:52:26.25 [1208:5988:0503/165226:ERROR:ssl_client_socket_openssl.cc(1149)] handshake failed; returned -1, SSL error code 1, net_error -101

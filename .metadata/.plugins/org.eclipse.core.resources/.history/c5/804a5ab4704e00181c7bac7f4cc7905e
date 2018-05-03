@@ -1,0 +1,115 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<%String rgPath=request.getContextPath();%>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日常照相</title>
+  <link href="<%=request.getContextPath()%>/assets/css/bootstrap.min.css" rel="stylesheet" />
+	    <link href="<%=request.getContextPath()%>/assets/css/bootstrap.css" rel="stylesheet">
+	    <link href="<%=request.getContextPath()%>/assets/css/yhz.css" rel="stylesheet">
+	    <script src="<%=request.getContextPath()%>/Content/jsml5shiv.min.js"></script>
+	    <script src="<%=request.getContextPath()%>/Content/js/respond.js"></script>
+	    <script src="<%=request.getContextPath()%>/assets/css/jquery-1.10.2.min.js"></script>
+	    <script type="text/javascript">   
+	    </script>
+</head>
+<body style="">
+<%@ include file="top.jsp" %>
+    <br/>
+    <br/>
+    <div class="container content-body">
+        <div class="row">
+            <div class="col-xs-3">
+              <%@ include file="left.jsp" %>                           
+            </div>
+            <div class="col-xs-9">             
+                <div class="section-box" style="text-align: center">            				
+                    <!--页面主体-->                                   
+                        <div class="search">                           
+                            <div class="row">                              
+                                <table width="700">
+					            <tr ><td rowspan="6"><OBJECT classid="clsid:18EE8930-6993-4ADA-B8BB-02BA5820AC94" id="aaa" CODEBASE="Termb.cab#version=1,0,0,1" VIEWASTEXT></OBJECT></td></tr> 
+								<form name="myform" action="carId.do" id="idCardfrom" method="post" onsubmit="return checknext()">
+								<tr>
+									<td >个人基本信息</td>
+								</tr>
+								<tr>
+									<td >姓名：</td>
+									<td ><input name="name" ></td>
+								</tr>
+								<tr>
+										<td >性别：</td>
+								<td ><input   name="sex"></td>
+					
+								</tr>
+								<tr>
+									<td >身份号码：</td>
+									<td ><input  name="zjhm"  type=""></td>
+									<input  name="idcardPhotoBuff"  type="hidden">
+								</tr>			
+                   	<tr>
+                   		<td>
+                   			 业务类型：
+                          <select name="BusinessType" id="BusinessType">
+								<option value="">
+									--- 请选择 ---
+								</option>
+								<c:forEach items="${businesslist}" var="bl">
+									<option value="${bl.businessType}">
+										${bl.businessType}
+									</option>
+								</c:forEach>
+								</select>
+                    		</td>
+                    		<td>
+                    		     <input type="button" value="读取二代证卡" onclick="showvalue();" class="btn btn-primary">
+                    			 <input type="submit" value="确定" class="btn btn-primary" accesskey="S">&nbsp;&nbsp;&nbsp;&nbsp;
+                                 <input type="button" onclick="qingkong()" value="清空" class="btn btn-primary">&nbsp;&nbsp;&nbsp;&nbsp;
+                   		         <input type="hidden" id="ymlx" name="ymlx" value="idCard">
+                   		</td>
+                   	</tr>
+                   	 </form>
+                                </table> 
+                                </div>
+                            </div>  
+                        </div>
+                   
+                   
+                    <div class="center" style="padding-top:5px">
+                        <object
+						classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+						id="Anki_Photo_s" width="880" height="630"
+						codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
+						<param name="movie"
+							value="<%=rgPath%>/jsp/Anki_Photo.swf" />
+						<param name="quality" value="high" />
+						<param name="bgcolor" value="#bdb5b5" />
+						<param name="allowScriptAccess" value="sameDomain" />
+						<param name="FlashVars"
+							value="id=${ zjhm }&name=123&url=${ saveUrl } " />
+						<embed
+							src="<%=rgPath%>/jsp/Anki_Photo.swf"
+							quality="high" bgcolor="#bdb5b5" width="450"
+							height="326" name="Anki_Photo" align="middle"
+							FlashVars="id=${ zjhm }&name=123&url=${ saveUrl } "
+							play="true" loop="false" quality="high"
+							allowScriptAccess="sameDomain"
+							type="application/x-shockwave-flash"
+							pluginspage="http://www.adobe.com/go/getflashplayer">
+						</embed>
+					</object>
+                    </div>    
+                                                              
+            </div><!--col-xs-9-->
+        </div>
+    </div>
+ <%@ include file="Dibutu.jsp" %>
+</body>
+</html>
